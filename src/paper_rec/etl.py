@@ -66,3 +66,7 @@ def get_sentences(e):
     summary = clean_text(e.summary)
     sentences = sent_tokenize(summary)
     return [title] + sentences
+
+
+def get_sentences_from_txt(txt):
+    return sent_tokenize(txt)

@@ -54,7 +54,7 @@ class Recommender:
         self.model = model
 
     def recommend(self, user_embedding, top_k=10):
-        scores = self.model(user_embedding, range(len(self.papers)))
+        scores = self.model(user_embedding, torch.LongTensor(range(len(self.papers))))
         preds = torch.topk(scores, top_k)
         indices = preds.indices.numpy()
         recs = [self.papers[i] for i in indices]
