@@ -2,10 +2,10 @@ import json
 import feedparser
 import nltk
 
-nltk.download('punkt')
-
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize
+
+nltk.download('punkt')
 
 feeds = ["http://export.arxiv.org/rss/cs.AI",
          "http://export.arxiv.org/rss/cs.CL",
@@ -30,6 +30,33 @@ def get_authors(e):
 
 def clean_text(txt):
     return BeautifulSoup(txt, "lxml").text.replace('\n', " ")
+
+
+def process_feeds(feeds):
+    entries = []
+
+    for feed_url in feeds:
+        print(f"processing {feed_url}")
+        feed = feedparser.parse(feed_url)
+        entries.extend(feed['entries'])
+
+    papers = [
+        {
+            "id": e.id,
+            "title": get_title(e),
+            "authors": get_authors(e),
+            "abstract": get_summary(e),
+            "sentences": get_sentences(e)
+        } for e in entries
+    ]
+    return papers
+
+
+def dump_jsonl(records, fname):
+    with open(fname, "w") as fout:
+        for r in records:
+            fout.write(json.dumps(r))
+            fout.write("\n")
 
 
 def get_sentences(e):
