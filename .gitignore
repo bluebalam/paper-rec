@@ -75,7 +75,7 @@ docs/_build/
 .idea
 
 # ipynb
-*.ipynb
+#*.ipynb
 # PyBuilder
 target/
 
